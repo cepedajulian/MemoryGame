@@ -1,3 +1,3 @@
 # memory-game
 
-Developed with html, css and js
+Developed with html, css and js.
