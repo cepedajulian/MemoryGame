@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>¡Recuerde la secuencia!</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>     
+<body>    
+    <h1>¡Recuerde la secuencia!</h1>
+    
+    <table style="margin: 0 auto;">
+        <tr>
+            <td>Jugadas: </td><td><input type="range" id="seteador" min=1 max=20 value="20" onchange="ModificarCantidadJugadasMax()"></td><td><div id="cantidadJugadasMax" style="text-align: center; font-size:xx-large;">20</div></td><td><button id="iniciar" onclick="Iniciar();">Iniciar</button></td><td><button id="parar" onclick="Parar();" disabled>Parar</button></td>
+        </tr>
+        <tr><td colspan=4 style="text-align: center;" ><div id="turno">Juguemos!</div></td></tr>
+    </table>
+    
+    <p style="text-align: center;"><progress id="barProgresoGral"   max="0"  value="" class="barProgreso"></progress></p>
+    <p style="text-align: center;"><progress id="barProgresoJugada" max="0"  value="" class="barProgreso"></progress></p>
+
+    <section style="margin: 0 auto; width: 612px;">
+        <!-- los cuadros comenzaran en 0 para coincidir con el JS-->
+        <div id="C0" class="cuadro"><img src="./img/copa.png" onclick="HumanoSelecciono(0)"></div>
+        <div id="C1" class="cuadro"><img src="./img/copa.png" onclick="HumanoSelecciono(1)"></div>
+        <div id="C2" class="cuadro"><img src="./img/copa.png" onclick="HumanoSelecciono(2)"></div>
+        <div id="C3" class="cuadro"><img src="./img/copa.png" onclick="HumanoSelecciono(3)"></div>
+        <div id="C4" class="cuadro"><img src="./img/copa.png" onclick="HumanoSelecciono(4)"></div>
+        <div id="C5" class="cuadro"><img src="./img/copa.png" onclick="HumanoSelecciono(5)"></div>
+        <div id="C6" class="cuadro"><img src="./img/copa.png" onclick="HumanoSelecciono(6)"></div>
+        <div id="C7" class="cuadro"><img src="./img/copa.png" onclick="HumanoSelecciono(7)"></div>
+        <div id="C8" class="cuadro"><img src="./img/copa.png" onclick="HumanoSelecciono(8)"></div>
+    </section>
+    <footer>
+            <br>Todos los Derechos reservados <?php echo date("Y");?>. <a href="https://cepedajulian.com">cepedajulian.com</a>
+        </div>
+    </footer>
+</body>
+
+<script>
+    //lista de sonidos para cada cuadro
+    var sonidos = ['click','click','click','click','click','click','click','click','click'];
+    
+    //declaracion del contenedor de la secuencia a seguir
+    var secuencia = new Array(20);    
+
+    //control de paso para cada uno
+    var jugadasmax, jugada, computadora, humano;
+
+    jugadasmax=20;
+
+    function ModificarCantidadJugadasMax(){
+        jugadasmax=document.getElementById("seteador").value;
+        document.getElementById("cantidadJugadasMax").innerHTML=jugadasmax;
+    }
+
+    //--------------------------------------------------------------------------------
+    function Iniciar(){    
+        document.body.style.backgroundColor = "#FFFFFF";
+
+        //carga la lista con la secuencia que se jugara con 20 pasos
+        for (let index = 0; index < 20; index++) {
+            secuencia[index]=GenerarAleatorio();            
+        }
+        
+        document.getElementById("seteador").disabled=true;
+        document.getElementById("iniciar").disabled=true;
+        document.getElementById("parar").disabled=false;
+        document.getElementById('barProgresoGral').max=jugadasmax;        
+
+        jugada=-1;
+        SiguienteJugada();
+    }
+
+    function Parar(){
+        Reiniciar();
+    }
+
+    function Reiniciar(){
+        document.getElementById('barProgresoGral').value=0;
+        document.getElementById('barProgresoJugada').value=0;
+        
+        document.body.style.backgroundColor = "#FFFFFF";
+        
+        document.getElementById('turno').innerHTML="Juguemos!";
+        
+        document.getElementById("seteador").disabled=false;
+        document.getElementById("iniciar").disabled=false;
+        document.getElementById("parar").disabled=true;
+    }
+
+    //--------------------------------------------------------------------------------
+    function GenerarAleatorio(){
+        //genera numeros enteros aleatorios entre 0 y 8 (estas son los cuadros posibles)
+        return Math.floor(Math.random() * 9);
+    }
+
+    //--------------------------------------------------------------------------------
+    function SiguienteJugada(){
+        computadora=-1;
+        humano=-1;
+
+        jugada++;
+        
+        document.getElementById('barProgresoGral').value=jugada+1;
+        document.getElementById('barProgresoJugada').max=jugada+1;
+        document.getElementById('barProgresoJugada').value=0;
+     
+        if (jugada==jugadasmax){
+            document.body.style.backgroundColor = "#00FF00";            
+            var gano = new Audio('./sounds/gano.mp3');
+            gano.play();
+            
+            alert("GANOOOO");
+            
+            Reiniciar();            
+        }else{
+            Computadora();
+        }
+    }
+
+    //--------------------------------------------------------------------------------
+    function Computadora(){
+        computadora++;
+        
+        //si aun no completo la secuencia
+        if (computadora<=jugada){
+            document.getElementById('barProgresoJugada').value=computadora+1;
+            document.getElementById('turno').innerHTML="COMPUTADORA";
+
+            Efecto(secuencia[computadora], 'Computadora()');
+        }else{
+            document.getElementById('barProgresoJugada').value=0;
+            Humano();
+        }
+    }
+
+    //--------------------------------------------------------------------------------
+    function Humano(){        
+        humano++;
+
+        //completo la secuencia??
+        if(humano<=jugada){            
+            document.getElementById('turno').innerHTML="Su TURNO";
+        }else{            
+            //el humano llego al final de la secuencia bien
+            var unamas = new Audio('./sounds/unamas.mp3');
+            unamas.play(); 
+            unamas.addEventListener("ended", function(){
+                SiguienteJugada();
+            });            
+        }
+    }
+
+    //--------------------------------------------------------------------------------
+    function HumanoSelecciono(cuadro){
+
+        //es el cuadro correcto?
+        if(cuadro==secuencia[humano]){            
+            document.getElementById('barProgresoJugada').value=humano+1;
+            Efecto(cuadro, 'Humano()' );            
+        
+        }else{            
+            document.body.style.backgroundColor = "#FF0000";
+            var perdio = new Audio('./sounds/perdio.mp3');
+            perdio.play();            
+            
+            alert("PERDIO!, Puntaje Obtenido: " + humano);
+            
+            Reiniciar();
+        }
+    }
+
+    //--------------------------------------------------------------------------------
+    function Efecto(cuadro, ejecutarFun){
+        //hace rotar el cuadro indicado en el parametro de la funcion
+        document.getElementById('C'+(cuadro)).classList.toggle('rotar');
+
+        //genera un objeto del tipo audio y le asiga el sonido a reproducir
+        var sonido = new Audio('./sounds/' + sonidos[cuadro] + '.mp3');
+        
+        //se especifica un evento al "finalizar" la reproduccion del sonido
+        sonido.addEventListener("ended", function(){            
+            //se retira la clase del cuadro que lo hace rotar
+            document.getElementById('C'+(cuadro)).classList.toggle('rotar');          
+            
+            //se elimina el objeto para no acumular memoria
+            //sonido=null;
+            //ejecuta la funcion especificada en el parametro
+            if(ejecutarFun=='Computadora()'){
+                eval(ejecutarFun);
+            }
+        });
+        
+        //se ejecuta el sonido
+        sonido.play();
+
+        if(ejecutarFun=='Humano()'){
+                eval(ejecutarFun);
+        }
+    }    
+    </script>
+</head>
+</html>

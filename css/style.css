@@ -1,0 +1,175 @@
+.barProgreso{
+    width: 90%;
+}
+
+.rotar{
+    transform: rotateY(360deg);	
+	transition: all .5s;
+}
+
+button{
+    text-align: center;
+}
+
+.cuadro{
+    position: fixed;
+    z-index: -100;
+    cursor: pointer;
+}
+
+.cuadro:hover{
+    border-color: blueviolet;
+    border-width: 1px;
+    border-style: solid;
+}
+
+footer{
+    position: fixed;
+    width: 100%;
+    background-color: cadetblue;
+    text-align: center;
+    bottom: 0px;
+}
+
+#C0{
+    background-color: aqua;
+    width: 204px;
+    margin-right: 210px;
+}
+
+#C1{
+    background-color: rgb(248, 172, 122);
+    width: 204px;
+    margin-left: 210px;
+}
+
+#C2{
+    background-color: rgb(218, 216, 241);
+    width: 204px;
+    margin-left: 420px;
+}
+
+#C3{
+    background-color: rgb(199, 221, 137);
+    width: 204px;    
+    margin-top: 240px;
+}
+
+#C4{
+    background-color: rgb(214, 117, 117);
+    width: 204px;
+    margin-left: 210px;
+    margin-top: 240px;
+}
+
+#C5{
+    background-color: rgb(176, 236, 189);
+    width: 204px;
+    margin-left: 420px;
+    margin-top: 240px;
+}
+
+#C6{
+    background-color: rgba(233, 236, 13, 0.562);
+    width: 204px;    
+    margin-top: 480px;
+}
+
+#C7{
+    background-color: rgb(250, 60, 2);
+    width: 204px;
+    margin-left: 210px;
+    margin-top: 480px;
+}
+
+#C8{
+    background-color: rgb(32, 8, 250);
+    width: 204px;
+    margin-left: 420px;
+    margin-top: 480px;
+}
+
+h1{
+    text-align: center;
+    text-decoration: #fff;
+}
+
+body{
+    margin: 0px;
+}
+
+.loguin{
+    text-align: right;
+}
+
+header {
+    width: 100%;
+    background-color: steelblue;
+}
+
+#btn-menu{
+    display:none;
+}
+
+#btn-img{
+    width: 30px;
+    height: 30px;
+}
+
+header label {
+    display: none;
+    width: 30px;
+    height: 30px;
+    padding: 10px;
+    border-right: 1px solid #fff;
+}
+
+.menu ul {
+    margin: 0;
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.menu li {
+    flex-grow: 1;
+    text-align: center;
+    border-right: 1px solid #fff;
+}
+
+.menu li:hover {
+    background: rgba(0, 0, 0, 0.3);
+} 
+
+.menu li:a {
+    display: block;
+    padding-block: 10px 10px;
+    color: #fff;
+    text-decoration: none;
+}
+
+@media (max-width: 768px){
+    header label {
+        display: block;
+    }
+
+    .menu {
+        position: absolute;
+        background: steelblue;
+        width: 70%;
+        margin-left: -70%;
+        transition: all 0.5s;
+    }
+
+    .menu ul {
+        flex-direction: column;
+    }
+
+    .menu li {
+        border-top: 1px solid #fff;
+    }
+
+    #btn-menu:checked ~ .menu {
+        margin: 0px;
+    }
